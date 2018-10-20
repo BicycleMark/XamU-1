@@ -1,6 +1,7 @@
 ﻿using Android.Speech.Tts;
 using Android.App;
 using Android.OS;
+using GreatQuotes.GreatQuotes;
 
 // Note: this class requires at least Android SDK 5.0 (Lollypop)
 // to build due to changes in the TTS APIs.

@@ -1,4 +1,5 @@
 ﻿using AVFoundation;
+using GreatQuotes.GreatQuotes;
 
 namespace GreatQuotes
 {
