@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise-01", "Exercise-01", "{D43173CA-A572-4885-8688-C656DE1A8237}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise-02", "Exercise-02", "{D43173CA-A572-4885-8688-C656DE1A8237}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatQuotes.iOS", "GreatQuotes.iOS\GreatQuotes.iOS.csproj", "{E4263589-2034-4FE7-B422-DB8A66BB3DEF}"
 EndProject
