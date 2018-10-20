@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 1: Add a Table View to an application</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Fundamentals of TableViews</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+
+        <h2>Duration</h2>
+        <p>~15 minutes</p>
+
+        <div class="hintblock">
+            <strong>Tip:</strong> This is a group exercise, make sure to take advantage of the live instructor as you go through the exercise together.
+        </div>
+
+        <h2>Goals</h2>
+
+        <p>
+            The primary goal of this lab will be to create a new iOS application and add a <code>UITableView</code> control, first in code, then using the Storyboard designer.
+        </p>
+
+        <h2>Required assets</h2>
+        <p>
+            There is a completed version of the exercise in the <b>Exercise 1</b> folder if you'd like to just watch the instructor and not do the exercise in tandem.
+        </p>
+
+        <h2>Challenge</h2>
+        <p>
+            This is a group exercise, intended to be done live with an instructor. Here are the high-level steps we will be working through:
+            <ol>
+                <li>
+                    Create a new Xamarin.iOS application.
+                </li>
+                <li>
+                    Add a <code>UITableView</code> to the View Controller code behind, setting it to fill the entire screen. Run and verify the control is present.
+                </li>
+                <li>
+                    Add a second screen to the storyboard and set it as the initial view controller.
+                </li>
+                <li>
+                    Change the View Controller type to be a <code>UITableViewController</code> and add a code-behind file to go with it. Run and verify the Table View is present.
+                </li>
+            </ol>
+        </p>
+
+        <!-- Steps -->
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <h2>Create a new Xamarin.iOS application</h2>
+        <p>
+            As a first step, we are going to create a Xamarin.iOS application to work on.
+        </p>
+        <ol>
+            <li>Create a new Unified API <b>C# > Single View App</b>, name the application &quot;MailBox&quot;.</li>
+        </ol>
+
+        <h2>Add a UITableView in code</h2>
+        <p>
+            There are multiple ways to add a Table View to the application - we will start with the code-based approach.
+        </p>
+        <ol>
+            <li>
+                The application should have a single <code>UIViewController</code> in the source structure - depending on the version and the IDE you are using it will have different names, but it will often have "ViewController" as part of the name. Locate this source file in the solution and open it.
+            </li>
+            <li>
+                Locate the <code>ViewDidLoad</code> override - this is the method which is called once the Storyboard visualization has been inflated into memory and is our first opportunity to really interact with the <code>UIView</code> for this controller.
+            </li>
+            <li>
+                Create a new <code>UITableView</code> object and store it in a private field in the class (this gives you access to it later).
+                <ul class="indent-none">
+                    <li>
+                        Pass in the <code>View.Bounds</code> property as the <em>frame</em> constructor parameter. This will ensure the Table View starts as the same size as its parent view.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Add the Table View to the view graph - there are three methods you can use, all of them do <em>exactly</em> the same thing:
+                <ul class="indent-none">
+                    <li>
+                        <code>UIViewController.Add</code> - there's an <code>Add</code> method on every View Controller. It calls <code>View.AddSubview</code>.
+                    </li>
+                    <li>
+                        <code>UIView.Add</code> - there's an <code>Add</code> method on every View. It also calls <code>View.AddSubview</code>.
+                    </li>
+                    <li>
+                        <code>UIView.AddSubview</code> - this is the real method in iOS and is what you would call if you were working in an Apple language.
+                    </li>
+                </ul>
+                Pick any of the alternatives to insert the view.
+            </li>
+            <p>
+                <a href="#" onclick="toggleBlock(this, 'why_three_methods', 'Why are there three methods to add a view?', 'Hide'); return false;" class="uiitem">Why are there three methods to add a view?</a>
+                <div class="wsblock" id="why_three_methods" style="display:none;">
+                    <!-- Each item is in a div "wsitem" -->
+                    <div class="wsitem">
+                        <!-- Give it a title and description -->
+                        <b>Why are there three methods to add a view?</b>
+            <p>
+                You might be thinking "Why have the other two variations?". It's a great question and the answer is flexibility. Having an <code>Add</code> method enables C# <em>collection-initialization</em> which means you can treat the <code>UIView</code> and <code>UIViewController</code> as an array and create it along with subviews in a single line of code:
+            </p>
+<pre class="prettyprint codeblock">
+    var view = new UIView(...) {
+         new UIButton(...),
+         new UILabel(...),
+         ...
+    };
+</pre></div>
+            </div>
+            </p>
+            <li>
+                You can check your code with the hint below. Run your application - you should see a Table View in the UI!
+            </li>
+            <p>
+                <a href="#" onclick="toggleCode(this,'tvInCode');return false;" class="uiitem">Show Code</a>
+                <div class="indent-none" id="tvInCode" style="display:none;">
+<pre class="prettyprint">
+<span class="highlight">UITableView tableView;</span>
+public override void ViewDidLoad()
+{
+    base.ViewDidLoad();
+                    <span class="highlight">Add(tableView = new UITableView(this.View.Bounds));</span>
+}
+</pre>
+                </div>
+            </p>
+            <li>
+                Try rotating the device (or simulator). Notice that the Table View doesn't properly rotate. Let's fix that by applying some constraints - you can learn more about constraints in <a target="_blank" href="">IOS300</a>.
+            </li>
+            <li>
+                Add the following code after you have added the view. This will lock the Top/Left corner of the Table View to its superview and make sure the Width and Height are kept synchronized. You can just copy/paste the code - it's not important to completely understand what's happening for this class.
+            </li>
+<pre class="codeblock prettyprint">
+// This assumes your TableView is in a field named "tableView"
+tableView.TranslatesAutoresizingMaskIntoConstraints = false;
+this.View.AddConstraint(NSLayoutConstraint.Create(tableView, NSLayoutAttribute.Top,
+    NSLayoutRelation.Equal, this.View, NSLayoutAttribute.TopMargin, 1, 0));
+this.View.AddConstraint(NSLayoutConstraint.Create(tableView, NSLayoutAttribute.Left,
+    NSLayoutRelation.Equal, this.View, NSLayoutAttribute.Left, 1, 0));
+this.View.AddConstraint(NSLayoutConstraint.Create(tableView, NSLayoutAttribute.Width,
+    NSLayoutRelation.Equal, this.View, NSLayoutAttribute.Width, 1, 0));
+this.View.AddConstraint(NSLayoutConstraint.Create(tableView, NSLayoutAttribute.Height,
+    NSLayoutRelation.Equal, this.View, NSLayoutAttribute.Height, 1, 0));
+</pre>
+            <li>
+                Run the app once more and try rotating the device - it should now rotate properly.
+            </li>
+        </ol>
+        <h2>Add a UITableView in the Storyboard designer</h2>
+        <p>
+            Let's try a different approach and use the Storyboard designer to create our Table View. We will be using the Table View Controller.
+        </p>
+        <ol>
+            <li>
+                Open the <b>Main.storyboard</b> file - this is the main screen for the application.
+            </li>
+            <li>
+                It should have a single screen in the storyboard currently. We will be leaving that one in place and adding a second screen. Zoom out a bit to give yourself some room using the Zoom tool bar at the top of the designer screen.
+            </li>
+            <li>
+                Locate the <b>Toolbox</b> and scroll through it until you find the <b>Table View Controller</b> item. This is both a View Controller and a Table View together and is, by far, the easiest way to create a screen with a Table View.
+            </li>
+            <p>
+                <a href="#" onclick="toggleBlock(this, 'use_tableview', 'What about dragging in a Table View?', 'Hide'); return false;" class="uiitem">What about dragging in a Table View?</a>
+                <div class="wsblock" id="use_tableview" style="display:none;">
+                    <!-- Each item is in a div "wsitem" -->
+                    <div class="wsitem">
+                        <!-- Give it a title and description -->
+                        <b>What about dragging in a Table View?</b>
+            <p>
+                We absolutely could drag a <b>Table View</b> element and drop it into an existing view controller. We would then assign a name to create an outlet property. This would be identical to the code-based approach we did earlier, just done in the designer instead. It would also have the same issues - we would need to setup some layout rules to keep it sized properly as the device rotates.
+            </p>
+            <p>
+                The primary advantage to using the TableView over the Table View Controller would be we could put other elements into the UI design if it's a general View Controller owner. The Table View Controller approach does all this with one step so it's much easier to work with. However it makes the Table View element take up the entire screen (with a few exceptions such as a Search Bar) and might not be appropriate in all cases.
+            </p>
+            </div>
+            </div>
+            </p>
+
+            <li>
+                Drag the Table View Controller from the Toolbox onto the designer surface into an empty space as shown in the following screen.
+            </li>
+            <img class="indent-none" src="./res/images/lab1-designer-1.PNG" />
+            <li>
+                This new screen is a second screen added to the application. The original View Controller is still the <em>initial view controller</em>, or starting view controller. To change that, we have two options:
+                <ul class="indent-none">
+                    <li>
+                        The "handle" next to the View Controller <img style="display:inline; margin:0; margin-top:4px;" src="./res/images/lab1-ivc-handle.PNG" /> indicates which one is the initial view controller and you can drag this between different view controllers to change which one you want to show initially.
+                    </li>
+                    <li>
+                        Alternatively, you can select the View Controller object in the storyboard by clicking the first button in the black bar across the bottom of the View Controller control in the designer (shown below),
+                        <img src="./res/images/lab1-selectvc.PNG" />
+                        or in the Document Outline window and then check the "Is Initial View Controller" property.
+                        <img src="./res/images/lab1-props-vc.PNG" />
+                    </li>
+                </ul>
+            </li>
+            <li>
+                As a final step, let's create our derived <code>UITableViewController</code> from the storyboard design. Select the Table View Controller in the designer - either by clicking the black status bar on the bottom of the controller, or by selecting it in the document outline.
+            </li>
+            <li>
+                In the properties window, assign the <b>Class</b> property to a new name - "TableViewController". When you press ENTER, the system will generate a new C# source file with that name and tie it to this view controller. This is where we can place our logic for the screen in the next exercise.
+            </li>
+            <img src="./res/images/lab1-tvc.PNG" />
+            <li>
+                If you open the new source file, it won't have much in it beyond the required constructor. The parameterized constructor that takes an <code>IntPtr</code> is required to instantiate the controller from a Storyboard. You will see this constructor form anytime iOS will be instantiating the object through the Objective-C runtime. If it is missing, the runtime will throw an exception.
+            </li>
+            <li>
+                With the new Table View Controller as the initial view controller, run the application again and verify that you see a Table View. Try rotating the device, it should work just fine because the <code>UITableView</code> is automatically resized by the Table View Controller - this is perfect as long as you want it to be full-screen.
+            </li>
+            <div class="hintblock">
+                <b>Note:</b> You might notice a couple of compiler warnings once you complete this part. They are valid, but we'll address them as we go forward. One of them has to do with designing the Table View cells in the designer and the second is because we are not using the other screen in the Storyboard. They are safe to ignore for now.
+            </div>
+        </ol>
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you created a Xamarin.iOS application and added a <code>UITableView</code> in both code-behind and in the Storyboard designer with a <code>UITableViewController</code>.
+        </p>
+
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

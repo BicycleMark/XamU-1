@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 2: Create a custom table view cell in code</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Customizing TableViews</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+
+        <h2>Duration</h2>
+        <p>15 minutes</p>
+
+        <div class="hintblock">
+            <strong>Tip:</strong> If you are doing this exercise live in a session, make sure to make good use of the instructor, they are online to answer any questions you have!
+        </div>
+
+        <h2>Goals</h2>
+
+        <p>
+          The primary goal of this exercise is to create a custom table view cell programmatically.</p>
+
+          <img src="./res/images/ex2_complete.png" width="320" />
+
+        <h2>Required assets</h2>
+        <p>
+            The provided <strong>Exercise 2</strong> folder contains a starter solution as well as a completed solution you can use to check your work.
+            Please make sure you have this folder before you begin.
+        </p>
+
+        <!-- Give them a challenge here, high-level steps of what we want them to do
+             so they can use this instead of the step-by-step (baby steps) included below -->
+        <h2>Challenge</h2>
+        <p>
+            You'll start with an existing application that has a <code>UITableViewController</code> created using the Xamarin designer.
+            Currently it's using the default cell style to display a single line of text.
+            You're going to create a custom cell and use it to display the weather data within the table view.
+        </p>
+        <ol>
+          <li>Inspect the starter solution in the Exercise 2 folder.</li>
+            <li>Create a custom table view cell class.</li>
+            <li>Add child views to display an image and three labels.</li>
+            <li>Layout the child views to mimic the image shown above.</li>
+            <li>Pass the weather data to the custom cell class.</li>
+            <li>Display the custom cell.</li>
+          </ol>
+        </p>
+
+        <!-- Steps -->
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <h2>Inspect the starter solution</h2>
+        <ol><li>
+          Open the starter solution in the <b>Exercise 2</b> folder and run the application.
+          It works but it's not very visually appealing.
+      </li></ol>
+
+        <h2>Create a custom table view cell class</h2>
+        <p>
+          Create a new class that derives from <code>UITableViewCell</code>.
+        </p>
+
+        <ol>
+            <li>Add a new class to the weather project and name it <b>WeatherCell.cs</b></li>
+            <li>Open the <b>WeatherCell.cs</b> class and change the class definition to inherit from <code>UITableViewCell</code>.
+            <li>We need to change the constructor in order to use the new cell with the table view created in the designer.
+              Change the constructor to accept an <code>IntPtr</code> named <b>ptr</b> and pass it to the base constructor.</li>
+        </ol>
+        <p><a href="#" onclick="toggleCode(this,'WeatherCell');return false;" class="uiitem">Show Code</a>
+        <div class="indent-medium" id="WeatherCell" style="display:none;">
+        <pre class="prettyprint codeblock">
+using System;
+using UIKit;
+using CoreGraphics;
+
+namespace WeatherApp
+{
+   public class WeatherCell : UITableViewCell
+   {
+      public WeatherCell (IntPtr ptr) : base (ptr)
+      {
+
+      }
+   }
+}
+            </pre></div></p>
+
+            <h2>Add child views to display an image and three labels</h2>
+            <p>
+              To display the weather data we're going to use a <code >UIImageView</code>
+              and three <code >UILabels</code>.
+            </p>
+
+            <ol>
+                <li>Add the child views to the custom cell.
+                  Specifically, create a <code >UIImageView</code> named <b>imgWeather</b>
+                  and three <code>UILabels</code>; <b>lblCity</b>, <b>lblHigh</b>, and <b>lblLow</b>.
+                </li>
+                <li>Instantiate the four child views in the constructor, customize the fonts and colors as you like, and add the views to the <code>ContentView</code> of the cell.
+            </ol>
+            <p><a href="#" onclick="toggleCode(this,'label');return false;" class="uiitem">Show Code</a>
+            <div class="indent-medium" id="label" style="display:none;">
+            <pre class="prettyprint codeblock">
+UILabel lblCity, lblHigh, lblLow;
+UIImageView imgWeather;
+
+public WeatherCell (IntPtr ptr) : base (ptr)
+{
+   var cellFont = UIFont.SystemFontOfSize(14);
+   var cellTextColor1 = UIColor.FromRGB (59, 102, 136);
+   var cellTextColor2 = UIColor.FromRGB (119, 180, 229);
+
+   imgWeather = new UIImageView ();
+   lblCity = new UILabel () { Font = cellFont, TextColor = cellTextColor1 };
+   lblHigh = new UILabel () { Font = cellFont, TextColor = cellTextColor2, TextAlignment = UITextAlignment.Right };
+   lblLow = new UILabel () { Font = cellFont, TextColor = cellTextColor1, TextAlignment = UITextAlignment.Right };
+
+   ContentView.Add (imgWeather);
+   ContentView.Add (lblCity);
+   ContentView.Add (lblHigh);
+   ContentView.Add (lblLow);
+}
+            </pre></div></p>
+
+            <h2>Layout the child views </h2>
+            <p> To align the child views, we're going to override the <code>LayoutSubviews</code> method.</p>
+            <ol>
+                <li>Override the <code>LayoutSubviews</code> method.</li>
+                <li>Set the size and position of the four child views from within the method.
+            </ol>
+            <p><a href="#" onclick="toggleCode(this,'LayoutSubviews');return false;" class="uiitem">Show Code</a>
+            <div class="indent-medium" id="LayoutSubviews" style="display:none;">
+            <pre class="prettyprint codeblock">
+public override void LayoutSubviews ()
+{
+   base.LayoutSubviews ();
+
+   var width = ContentView.Frame.Width;
+
+   imgWeather.Frame = new CGRect (0, 0, 30, 30);
+   imgWeather.Center = ContentView.Center;
+
+   lblCity.Frame = new CGRect (20, 7, 100, 30);
+   lblLow.Frame = new CGRect (width - 50, 7, 30, 30);
+   lblHigh.Frame = new CGRect (lblLow.Frame.Left - 30, 7, 30, 30);
+}
+            </pre></div></p>
+
+            <h2>Pass the weather data to the custom cell</h2>
+            <p>
+              We'll create a public method that accepts a <b>Weather</b> object and then updates our child views.
+            </p>
+
+            <ol>
+                <li>Create a public method called <code>UpdateData</code> that accepts a <code>Weather</code> object.
+                </li>
+                <li>Set the <code>Text</code> properties on the three <code>UILabel</code>s.</li>
+                <li>Set the <code>Image</code> property of the <code>UIImageView</code>.</li>
+            </ol>
+            <p><a href="#" onclick="toggleCode(this,'UpdateData');return false;" class="uiitem">Show Code</a>
+            <div class="indent-medium" id="UpdateData" style="display:none;">
+            <pre class="prettyprint codeblock">
+public void UpdateData (Weather weather)
+{
+   imgWeather.Image = UIImage.FromBundle(weather.CurrentConditions.ToString().ToLower() + ".png");
+
+   lblCity.Text = weather.City;
+   lblHigh.Text = String.Format ("{0}", weather.High);
+   lblLow.Text = String.Format ("{0}", weather.Low);
+}
+            </pre></div></p>
+
+            <h2>Use the custom cell</h2>
+            <p>
+              Update the Table View code-behind to use the custom cell and pass it the weather data.
+            </p>
+
+            <ol>
+                <li>Open <b>WeatherTVC.cs</b>
+              <li>In order to implement cell re-use for our custom cell, we'll register the cell from within the table view class.
+                    In the constuctor of  <b>WeatherTVC</b>, register the custom cell using the cell ID.
+              </li></li></ol>
+                    <p><a href="#" onclick="toggleCode(this,'Register');return false;" class="uiitem">Show Code</a>
+                    <div class="indent-medium" id="Register" style="display:none;">
+                    <pre class="prettyprint codeblock">
+partial class WeatherTVC : UITableViewController
+{
+   public WeatherTVC (IntPtr handle) : base (handle)
+   {
+      data = WeatherFactory.GetWeatherData ();
+
+      TableView.RegisterClassForCellReuse(typeof(WeatherCell), CELL_ID);
+   }
+   ...
+}
+                    </pre></div><ol start="3"><li >Scroll down to the <code>GetCell</code> method.</li>
+                <li>Update the <code>GetCell</code> method.
+                  Because the cell is registered with the table view, you no longer need to manually instantiate the cells.
+                  But we will need to cast the returned cell to <code>WeatherCell</code> so we can use the <code>UpdateData</code> method.
+
+                <li>Finally, call <code>UpdateData</code> on the  cell, and pass it the appropriate weather data.
+                </li>
+            </ol>
+            <p><a href="#" onclick="toggleCode(this,'GetCell');return false;" class="uiitem">Show Code</a>
+            <div class="indent-medium" id="GetCell" style="display:none;">
+            <pre class="prettyprint codeblock">
+public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+{
+   var cell = (WeatherCell)tableView.DequeueReusableCell (CELL_ID);
+
+   cell.UpdateData (data [indexPath.Row]);
+
+   return cell;
+}
+            </pre></div><ol start="6"><li> Run the app!</li></ol></p>
+
+
+        <h1>Summary</h1>
+        <p>
+            Congratulations! You have sucessfully created and utilized a custom table view cell.
+        </p>
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 2: Implement tab navigation with TabLayout</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>AND205 - Android Navigation</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Duration</h2>
+        <p>
+            15 minutes
+        </p>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Goals</h2>
+ 
+        <p>
+            The goal of this lab is to add tab navigation to a partially-written app.
+            You will be working on a <strong>Clock</strong> app that provides the three pages shown below: <em>current time</em>,
+            <em>stopwatch</em>, and <em>about</em>. The individual pages of the app are supplied; your job is to build the main
+            navigation structure. Notice the tabs along the top of the UI; that is the key thing you will be coding.
+        </p>
+
+        <img src="./res/images/TabNavigationCompleted.png" />
+
+        <h2>Required assets</h2>
+        <p>
+            The provided <strong>Exercise 2 > Start</strong> folder contains the app you will use.
+            There is also a <strong>Exercise 2/Completed</strong> folder with a solution you
+            can use to check your work. Please make sure you have these folders before you begin.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+	        Examine the starter code
+        </h2>
+        
+        <p>
+            The supplied code implements the entire <strong>Clock</strong> app except for the tab navigation part.
+            Before you begin coding, these steps will lead you through an examination of a few key parts of the provided code.
+        </p>
+        
+        <ol>
+            <li>
+                Open the <strong>Clock</strong> solution from the <strong>Start</strong> folder.
+            </li>
+            
+            <li>
+                Open <strong>Resources > layout > Time.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Notice that the UI to display the current time is just a <code>TextView</code>. The string it displays
+                is updated every second from the code-behind.
+            </li>
+
+            <li>
+                Open <strong>TimeFragment.cs</strong>.
+            </li>
+
+            <li>
+                Note that the <code>TimeFragment</code> inherits from the support version of the <code>Fragment</code>
+                base class. The implementation uses a timer to update the UI once per second.
+            </li>
+
+            <li>
+                The other fragments (<code>StopwatchFragment</code> and <code>AboutFragment</code>) are similar. If you
+                have extra time, feel free to examine them; however, there is nothing there that you need to know to
+                continue with the exercise.
+            </li>
+
+            <li>
+                The <strong>Android Support Library v7 AppCompat</strong> package has been added to the project.
+                This contains the <code>Fragment</code> class which is used in the implementation of the three
+                fragments (<code>TimeFragment</code>, <code>StopwatchFragment</code>, and <code>AboutFragment</code>).
+                It also contains the <code>FragmentActivity</code> class
+                used as the base Activity type so you inherit the support version of <code>FragmentManager</code>.
+            </li>
+
+            <li>
+                The <strong>Android Design Support Library</strong> package has also been added to the project for you.
+                This contains the <code>TabLayout</code>, <code>TabLayout.Tab</code>, and <code>TabItem</code> classes
+                you will use to implement tab navigation.
+            </li>
+
+            <li>
+                Finally, open <strong>Properties > AndroidManifest.xml</strong> and note that one of the AppCompat
+                themes is used for the Application theme.
+            </li>
+
+           </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Create the tab UI
+        </h2>
+
+        <p>
+            In this part, you will create the <code>TabLayout</code> and use XML to populate it with three tabs,
+            one for each of the three fragments (time, stopwatch, and about). The supplied starter code contains
+            images in the drawable folders that you will use on the tabs.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>Resources > layout > Main.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Add a <code>TabLayout</code> to the top of the existing <code>LinearLayout</code>.
+                Use traditional start and end tags because you will be adding tabs inside.
+                Give it an id so it can be accessed from code.
+                The start tag is shown below to save you some typing.
+<p><pre class="prettyprint">
+&lt;android.support.design.widget.TabLayout
+   android:id="@+id/tabLayout"
+   android:layout_height="wrap_content"
+   android:layout_width="match_parent"&gt;
+</pre></p>
+            </li>
+
+            <li>
+                Add the <code>TabItem</code> element shown below to the <code>TabLayout</code>.
+                This will create the tab for the current-time fragment - notice how it uses
+                "Time" as its text and the "ic_access_time_white_24dp" drawable for its icon.
+<p><pre class="prettyprint">
+&lt;android.support.design.widget.TabItem
+   android:text="Time"
+   android:icon="@drawable/ic_access_time_white_24dp" /&gt;
+</pre></p>
+            </li>
+
+            <li>
+                Add a <code>TabItem</code> element to the <code>TabLayout</code> for the stopwatch fragment.
+                Use "Stopwatch" as the text and "ic_timer_white_24dp" as the icon.
+            </li>
+
+            <li>
+                Add a <code>TabItem</code> element to the <code>TabLayout</code> for the about fragment.
+                Use "About" as the text and "ic_info_outline_white_24dp" as the icon.
+            </li>
+
+            <li>
+                In code, we will use the position of the tabs to identify which tab the user selects.
+                Please check to make sure you added them in the following order:
+                <em>time</em>, <em>stopwatch</em>, <em>about</em>.
+                This will put <em>time</em> at position 0, <em>stopwatch</em> at position 1, and <em>about</em>  at position 2.
+            </li>
+
+            <li>
+                Notice that <strong>Main.axml</strong> already contains a <code>FrameLayout</code>
+                with an id. This is the container that will display one of the three fragments.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Implement the tab-navigation code
+        </h2>
+
+        <p>
+            You will use code to swap the visible fragment when the user selects a tab.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>MainActivity.cs</strong>.
+            </li>
+
+            <li>
+                Inside <code>OnCreate</code>, use <code>FindViewById</code> to get a reference to the <code>TabLayout</code>.
+            </li>
+
+            <li>
+                Subscribe to the <code>TabLayout</code>'s <code>TabSelected</code> event.
+            </li>
+
+            <li>
+                In your handler, <code>switch</code> on <code>e.Tab.Position</code>.
+                In case <code>0</code>, navigate to the <code>TimeFragment</code>.
+                In case <code>1</code>, navigate to the <code>StopwatchFragment</code>.
+                In case <code>2</code>, navigate to the <code>AboutFragment</code>.
+                Here is a <code>Navigate</code> method to swap fragments that you can use if you would like to.
+<p><pre class="prettyprint">
+void Navigate(Android.Support.V4.App.Fragment fragment)
+{
+   var transaction = base.SupportFragmentManager.BeginTransaction();
+   transaction.Replace(Resource.Id.contentFrame, fragment);
+   transaction.Commit();
+}
+</pre></p>
+            </li>
+
+            <li>
+                Currently, the app only shows a fragment when the user selects a tab - this means there won't
+                be any fragment visible at startup. Please fix this by navigating to the <code>TimeFragment</code>
+                from the <code>MainActivity.OnCreate</code> method.
+			</li>
+
+            <li>
+                Run the app to test your work.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you used the Design Support Library's <code>TabLayout</code> class to implement tab navigation.
+            Since there were a fixed number of tabs, you could add them in XML. The code responded to tab-selection
+            events by swapping the visible fragment.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

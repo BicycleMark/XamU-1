@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 4: Display a master-detail split view of a collection</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>XAM290 Master-detail and Drawer Navigation in Xamarin.Forms</header>
+
+    <section id="main">
+        <h2>Exercise 4: Display a master-detail split view of a collection</h2>
+<p>The goal of this exercise is to use a <code>MasterDetailPage</code> to display and navigate a homogeneous collection of data with master and detail displayed side-by-side.
+    Our application has master and detail pages already. We'll add a <code>MasterDetailPage</code> and coordinate on selection.</p>
+</ul>
+<blockquote class="info-quote">To complete the exercise, you will need <a href="https://www.visualstudio.com/" target="_blank">Visual Studio for Windows or macOS</a> with the <a href="https://www.xamarin.com/visual-studio" target="_blank">Xamarin development tools</a> installed. You will also need either an emulator/simulator or a device to run the exercise on. Please see the <a href="https://university.xamarin.com/content/setupmenu" target="_blank">setup page</a> if you need help installing the Xamarin development environment.
+</blockquote>
+
+        <figure class="figure">
+            <img src="res/images/ex4-ios-masterlist.png" style="max-height: 450px;" />
+        </figure>
+
+<hr>
+<h2>Open the starter solution</h2>
+<p>In Visual Studio, open the Exercise 4 Start solution included with the downloaded or cloned course materials.</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong></li>
+<li>Open <strong>Exercise 4/Start/Planets.sln</strong></li>
+<li>Open <b>PlanetsMasterPage.xaml</b> in the shared project. Notice it's using a <code>ListView</code> and the binding is assigned in the code-behind.</li>
+<li>Open <b>PlanetsDetailPage.xaml</b> in the shared project. Notice it's basic content page that contains an image and several labels.</li>
+<li>Run the application, it should display a list of astronomy-related items.</li>
+</ol>
+
+<hr>
+<h2>Raise a selection event</h2>
+<p>We'll create an event on the master page so we can be notified when the user makes a selection.</p>
+<ol>
+    <li>Open <b>PlanetsMasterPage.xaml.cs</b> in the shared project.</li>
+    <li>Create a new event named <b>MasterItemSelected</b> that provides an <code>int</code>. This will be the index of the selected item from the list.</li>
+    <li>Inspect the constructor, notice that we're subscribed to the <code>ListView</code>'s <code>ItemSelected</code> event with a named method.</li>
+    <li>In <b>MenuItemsListViewItemsSelected</b>, create a local <code>Planet</code> variable.</li>
+    <li>Cast and assign <code>e.SelectedItem</code> to the local <b>planet</b> variable.</li>
+    <li>Raise the <code>MasterItemSelected</code> event, passing in the Id from the planet model object.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public partial class PlanetsMasterPage : ContentPage
+{
+    public event EventHandler&lt;int> MasterItemSelected;
+
+    public PlanetsMasterPage()
+    {
+        ...
+
+        MenuItemsListView.ItemSelected += MenuItemsListViewItemSelected;
+    }
+
+    void MenuItemsListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        Planet planet = ((Planet)e.SelectedItem);
+        MasterItemSelected?.Invoke(sender, planet.Id);    
+    }
+}
+</code></pre>
+
+<hr>
+<h2>Populate the Detail UI with data</h2>
+<p>Our detail page currently doesn't present any content. We'll update the constructor to accept a planet model object and use it as the binding context.</p>
+<ol>
+<li>Open <b>PlanetsDetailsPage.xaml</b> in the shared project. Notice that the labels' Text properties are already configured for data binding.</li>
+<li>Open <b>PlanetsDetailPage.xaml.cs</b>.</li>
+<li>Update the constructor to accept an <code>int</code> named <b>id</b>.</li>
+<li>Create a local <code>Planet</code> variable named <b>planet</b>.</li>
+<li>Use the static <code>PlanetDataRepository.GetPlanetFromId</code> method to assign <b>planet</b>.</li>
+<li>Assign <b>planet</b> as the binding context.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public PlanetsDetailPage(int id)
+{
+    InitializeComponent();
+
+    var planet = PlanetDataRepository.GetPlanetFromId(id);
+
+    BindingContext = planet;
+}
+</code></pre>
+
+<hr>
+<h2>Create a MasterDetailPage</h2>
+<ol>
+<li>Create a new class named <b>PlanetsMasterDetail</b> in the shared project.</li>
+<li>Update the class signature to derive from <code>MasterDetailPage</code>.</li>
+<li>Add a default constructor.</li>
+<li>In the constructor, create a local instance of <code>PlanetsMasterPage</code> named <b>master</b>.</li>
+<li>Assign <b>master</b> to the <code>Master</code> property.</li>
+<li>Set the <code>MasterBehavior</code> to <code>Split</code>.</li>
+<li>Subscribe to <b>master</b>'s <code>MasterItemSelected</code> event using a method named <code>MasterItemSelected</code>.</li>
+<li>Call <code>MasterItemSelected</code> from the constructor with a default value of <code>0</code>. We'll use this in a moment to assign a default details page.</li>
+<li>Open <b>App.xaml.cs</b> and change the <code>MainPage</code> assignment to an instance of your <b>PlanetsMasterDetail</b> page.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public class PlanetsMasterDetail : MasterDetailPage
+{
+    public PlanetsMasterDetail()
+    {
+        MasterBehavior = MasterBehavior.Split;
+
+        var master = new PlanetsMasterPage();
+
+        Master = master;
+
+        master.MasterItemSelected += MasterItemSelected;
+
+        MasterItemSelected(this, 0);
+    }
+
+    void MasterItemSelected(object sender, int id)
+    {
+  
+    }
+}
+</code></pre>
+
+<hr>
+<h2>Update the detail page</h2>
+<ol>
+    <li>In <code>MasterItemSelected</code>, assign the <code>Detail</code> property with an instance of <code>PlanetsDetailPage</code>. Pass <b>id</b> to the constructor.</li>
+    <li>To ensure our app displays a menu icon on Android phones, "wrap" the <code>PlanetsDetailPage</code> instance in a <code>NavigationPage</code> before the <code>Detail</code> assignment.</li>
+    <li>And finally, to ensure our app behaves correctly on all phones, set <code>IsPresented</code> to <code>false</code> when running on a phone. Alternatively, you can wrap the assignment in a try/catch.</li>
+    <li>Run the application to verify your details update when picking a new item from the master list.</li>
+</ol>
+
+<pre class="prettyprint-collapse"><code>void MasterItemSelected(object sender, int id)
+{
+    Detail = new NavigationPage(new PlanetsDetailPage(id));
+
+    if (Device.Idiom == TargetIdiom.Phone)
+        IsPresented = false;
+}
+</code></pre>
+
+<hr>
+<h2>Exercise summary</h2>
+<p>In this exercise, you implemented a master-detail UI to browse a collection of data in a Xamarin.Forms application. You also ensured the application behaves correctly on all supported devices, include phones.
+<p>You can view the completed solution in the <strong>Exercise 4 &gt; Completed</strong> folder of your copy of the cloned or downloaded <a href="https://github.com/XamarinUniversity/XAM205/">course materials</a>.</p>
+
+
+        <div class="align-right">
+            <a href="../StartHere.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/jquery.imagemapster.min.js"></script>
+    <script src="./res/js/imagemap.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.<br><a target="_blank" href="http://university.xamarin.com">Visit Xamarin University for more classes and content</a></footer>
+
+</body>
+</html>

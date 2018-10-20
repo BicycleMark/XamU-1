@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 4: Create static cells in the designer</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Customizing TableViews</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+
+        <h2>Duration</h2>
+        <p>15 minutes</p>
+
+        <div class="hintblock">
+            <strong>Tip:</strong> If you are doing this exercise live in a session, make sure to make good use of the instructor, they are online to answer any questions you have!
+        </div>
+
+        <h2>Goals</h2>
+
+        <p>The primary goal of this lab will be to create a settings page for our weather app by designing custom static cells with the Xamarin Storyboard Designer. <!-- Include a screen shot of the completed project? -->
+
+        <!-- Include any differences about the OS or environment expectations
+             if there are changes from StartHere for this lab -->
+
+        <!-- Note any starter/complete or assets included in this lab. -->
+        <!-- Remove this section if there are none -->
+        </p>
+        <p><img src="res/images/finished.png"></p>
+        <h2>Required assets</h2>
+        <p>
+            The provided <strong>Exercise 4</strong> contains a <b>begin</b> project and a completed solution that you can use to check your work.
+            Please make sure you have this folder before you begin.            </p>
+
+        <!-- Give them a challenge here, high-level steps of what we want them to do
+             so they can use this instead of the step-by-step (baby steps) included below -->
+        <h2>Challenge</h2>
+        <p>Here are the high-level steps you will need to perform. Use these to complete the exercise and refer to the more detailed step-by-step instructions to fill in any necessary details. In this exercise you will  recreate the first five cells of the Settings App for the iPhone to get a feel for how you would create static cells in Storyboard Designer.</p>
+        <p>
+            Our basic steps will be:
+      <ol>
+              <!-- Can put additional hints in collapsable blocks for additional resources - these should be
+   things we covered in the materials already, but useful as reminders for how to complete a task. Make sure to replace the "unique_id_here", also you have to write out the starting text twice - make sure they are the same! -->
+
+              <li>Open the <strong>Begin</strong> solution provided in the Exercise 4 folder.</li>
+              <!-- Can put additional hints in collapsable blocks for additional resources - these should be
+   things we covered in the materials already, but useful as reminders for how to complete a task. Make sure to replace the "unique_id_here", also you have to write out the starting text twice - make sure they are the same! -->
+              <li>Working in the <strong>MainStoryboard.storyboard</strong> file, select the table view.</li>
+              <li>Change the<strong> table view</strong> to display <strong>one section of static cells</strong> with a dark gray cell separator.</li>
+              <li>Change the <strong>section header </strong> to read &quot;Settings&quot; and create 5 rows of cells.</li>
+              <li>Add the missing cells to the UItableView from the Widget tab of the properties pane.</li>
+              <li>For each cell add, style and position the following UIImageViews,
+                UILabels and UIControllers from the toolbox to each of the cells:</li>
+
+      <p><img src="res/images/UIViews.png" width="446" height="474"></p>
+    <li>Replace the image and title placeholders with final content</ol>
+        <!-- Steps -->
+      <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <h2>Inspect the starter solution</h2>
+        <ol>
+            <li>Open the <strong>Begin</strong> solution provided in the Exercise 4 folder.</li>
+            <!-- Can put additional hints in collapsable blocks for additional resources - these should be
+   things we covered in the materials already, but useful as reminders for how to complete a task. Make sure to replace the "unique_id_here", also you have to write out the starting text twice - make sure they are the same! -->
+            <li>Open  the <strong>MainStoryboard.storyboard</strong> file and select the <strong>table view </strong>(not the controller).<br>
+          </li>
+            <li><code>UITableViews</code> come with dynamic prototype cells by default, to change this you need to select the<strong> table view</strong> and change the content type in the properties pane to display one section of  static cells with a dark gray cell separator.</li></ol>
+        <img src="res/images/staticCells.png">
+
+      <ol start="4">
+<li>Next, we will change some of the section properties. To do that we must first select the section on the storyboard and then change the properties of the<strong> table view section</strong> in the properties pane and <strong>change the header</strong> to &quot;Settings&quot; and <strong>number of rows</strong> to &quot;5&quot;</li></ol>
+      <img src="res/images/sectionRowsHeader.png" width="653" height="227">
+      <ol start="5">
+            <li>For each cell we are going to add UILabels, UIImageViews and controls. </li> </ol>
+      <ul>
+
+    <ul>
+      <li>The first three cells can be styled with the default cell styles.</li></ul></ul>
+      <img src="res/images/staticCells.png" width="616" height="279" alt=""/>
+      <ul><ul>
+        <li>The bottom two cells are custom and we need to add the child UIViews to these cells:
+          <ul>
+          <li>First, select the cell.</li>
+          <li>Drag and position the UI element from the toolbox onto the cell.</li>
+          <li>To layout the elements more precisely you can select the element and specify the x and y coordinates in the layout tab of the properties pane.</li>
+          </ul>
+      </li>
+      </ul>
+      </ul>
+            </li>
+
+     <img src="res/images/toolbox.png">
+      <ol start="6">
+        <li>An accessory is optional in a custom cell. </li>
+        <ul>
+          <li>We can add them by selecting the cell and then, in the widget tab of the properties pane, select the accessory you would like to use. </li>
+        </ul></ol>
+        <img src="res/images/disclosure.png">
+
+      <ol start="7">
+        <li>Now that the UI elements are placed we will customize them by providing new images and custom titles.<br>
+          <ul>
+            <li>To change the image select the UIImageView and select the icon you want to use from the image dropdown in the properties pane
+            </li>
+          </ul>
+        </li>
+      </ol>
+           <img src="res/images/image.png">
+           <ul>
+             <ul>
+               <li>To change the title and color of the UI label, select the label and change change them in the properties pane.</li>
+             </ul>
+           </ul>
+        <img src="res/images/label.png">
+
+           <ol start="8">
+             <li>Once all of your images and label titles are changed your UITableView
+                should look something like this:</li></ol>
+             <img src="res/images/finished.png">
+             <ol start="9"> <li>In order to interact with our cells in the code behind we need to set unique identifiers for each cell. 
+                 For the custom cells we also name the child controls.</li>
+
+             </ol>
+      <img src="res/images/ReuseIdent.png" width="714" height="279" alt=""/>
+<h1>Summary</h1>
+      <p> In the exercise you designed a table view with custom static cells in the Xamarin iOS Designer.</p>
+      <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

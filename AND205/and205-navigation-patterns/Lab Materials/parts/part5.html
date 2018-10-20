@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 5: Implement drawer navigation with DrawerLayout</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>AND205 - Android Navigation</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>Duration</h2>
+        <p>
+            15 minutes
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>Lab goals</h2>
+
+        <p>
+            The goal of this exercise is to add Drawer Navigation to a partially-written app.
+            You will be working on a <strong>Clock</strong> app with three pages:
+            <em>current time</em>, <em>stopwatch</em>, and <em>about</em>. The individual pages
+            and the Main Activity with a Toolbar are supplied. The navigation UI is also provided since
+            it requires a large amount of boilerplate XML. Your job is to write the code that 
+            opens/closes the drawer and a handler for menu-item selection.
+        </p>
+
+        <p>
+            The image below shows the finished app at the end of this exercise. The first screenshot shows the
+            open navigation drawer containing the navigation menu. The other three screenshots show the result
+            of navigating to each of the three fragments.
+        </p>
+        <img src="./res/images/DrawerNavigationCompleted.png" />
+
+        <h2>Required assets</h2>
+        <p>
+            The provided <strong>Exercise 5/Start</strong> folder contains the starter code for the app.
+            There is also a <strong>Exercise 5/Completed</strong> folder with a solution you
+            can use to check your work. Please make sure you have these folders before you begin.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Steps</h1>
+
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <h2>
+            Examine the starter code
+        </h2>
+
+        <p>
+            The supplied code implements most of the <strong>Clock</strong> app.
+            You are likely already familiar with the core app from previous exercises, so this section gives a quick
+            tour of the new parts.
+        </p>
+
+        <ol>
+            <li>
+                Open the <strong>Clock</strong> solution from the <strong>Start</strong> folder.
+            </li>
+
+            <li>
+                Open <strong>Properties > AndroidManifest.xml</strong>. Notice that we set Theme.AppCompat.NoActionBar
+                as the app theme. This is required because we are using a support Toolbar as our app bar.
+            </li>
+
+            <li>
+                Open <strong>Resources > layout > Main.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                We use a <code>DrawerLayout</code> as the root layout. It has an <code>id</code> so you can access
+                it from code.
+            </li>
+
+            <li>
+                After that is a <code>LinearLayout</code> with a <code>Toolbar</code> and a <code>FrameLayout</code>.
+                The <code>Toolbar</code> hosts the "hamburger" menu button and the <code>FrameLayout</code> displays the
+                content fragment (<em>time</em>, <em>stopwatch</em>, or <em>about</em>). Both have ids so you can access
+                them from code.
+            </li>
+
+            <li>
+                After that is a <code>NavigationView</code> that implements the sliding-drawer menu.
+                Its gravity is set to <code>start</code> so it will slide out from the left side.
+                It has an id so it can be accessed from code. 
+                Finally, and most importantly, its <code>menu</code> property is set to the name of the XML
+                file containing the menu definition.
+            </li>
+
+            <li>
+                Open <strong>Resources > menu > navigation_menu.xml</strong>.
+            </li>
+
+            <li>
+                The menu has three <code>item</code> elements, one for each of the three fragments
+                (<em>time</em>, <em>stopwatch</em>, <em>about</em>). Each item has an id so you
+                can identify it from code - you'll be writing an event handler to respond when the
+                user selects one of these menu entries.
+            </li>
+
+            <li>
+                Open <strong>MainActivity.cs</strong>.
+            </li>
+
+            <li>
+                Notice that the <code>MainActivity</code> class inherits from <code>AppCompatActivity</code>.
+                This is required because we are using a support Toolbar as the Activity's app bar.
+            </li>
+
+            <li>
+                Examine the <code>OnCreate</code> method. Notice that the code to install the Toolbar as
+                the app bar is already in place. The Android menu icon (aka "hamburger") is set as the
+                icon for the Toolbar's navigation button.
+            </li>
+
+            <li>
+                Finally, notice the provided <code>Navigate</code> helper method that updates the visible
+                fragment in the UI.
+            </li>
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Respond to Toolbar navigation click
+        </h2>
+
+        <p>
+            Here you will open the navigation drawer when the user taps on the Toolbar's navigation icon.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>MainActivity.cs</strong>. All your work will be done in this file.
+            </li>
+
+            <li>
+                Override the Activity's <code>OnOptionsItemSelected</code> method.
+                Test the value of <code>item.ItemId</code> to see if it is equal to <code>Android.Resource.Id.Home</code>.
+                The code is provided below if you would like it.
+<p><a href="#" onclick="toggleCode(this,'OnOptionsItemSelected');return false;" class="uiitem">Show Code</a>
+<div class="indent-medium" id="OnOptionsItemSelected" style="display:none;">
+<pre class="prettyprint">
+public override bool OnOptionsItemSelected(IMenuItem item)
+{
+   switch (item.ItemId)
+   {
+      case Android.Resource.Id.Home:
+      // open the drawer
+      break;
+   }
+   return true;
+}
+</pre></div></p>
+            </li>
+
+            <li>
+                Inside your case for <code>Android.Resource.Id.Home</code> you'll need to open the drawer.
+                There are two steps to do this.
+                First, use <code>FindViewById</code> to retrieve a reference to the <code>DrawerLayout</code>.
+                Second, call the <code>OpenDrawer</code> method and pass the gravity value to identify the drawer
+                (for us this will be <code>Android.Support.V4.View.GravityCompat.Start</code>).
+            </li>
+
+            <li>
+                Run the app to test your work. Use the button to open the navigation drawer.
+                Use swipe gestures to open/close the navigation drawer.
+                Notice that selecting a menu entry does not close the drawer - you'll be coding that next.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Respond to menu selection
+        </h2>
+
+        <p>
+            Here you will replace the visible fragment when the user selects a menu entry.
+        </p>
+
+        <ol>
+            <li>
+                In <code>OnCreate</code>, use <code>FindViewById</code> to retrieve a reference to the
+				<code>NavigationView</code>.
+<p><pre class="prettyprint">
+var menu = FindViewById&lt;Android.Support.Design.Widget.NavigationView&gt;(Resource.Id.navigationView);
+</pre></p>
+            </li>
+
+            <li>
+                Subscribe to the <code>NavigationView</code>'s <code>NavigationItemSelected</code> event.
+            </li>
+
+            <li>
+                In your <code>NavigationItemSelected</code> handler, <code>switch</code> on <code>e.MenuItem.ItemId</code>.
+                Add one <code>case</code> for each menu item (the three ids you need to look for are <code>timeMenuItem</code>,
+                <code>stopwatchMenuItem</code>, and <code>aboutMenuItem</code>). In each case, call the
+                <code>Navigate</code> helper method and pass it an appropriate fragment.
+                The code is provided below if you would like it.
+<p><a href="#" onclick="toggleCode(this,'OnMenuItemSelected');return false;" class="uiitem">Show Code</a>
+<div class="indent-medium" id="OnMenuItemSelected" style="display:none;">
+<pre class="prettyprint">
+void OnMenuItemSelected(object sender, Android.Support.Design.Widget.NavigationView.NavigationItemSelectedEventArgs e)
+{
+   switch (e.MenuItem.ItemId)
+   {
+      case Resource.Id.timeMenuItem:      Navigate(new TimeFragment());      break;
+      case Resource.Id.stopwatchMenuItem: Navigate(new StopwatchFragment()); break;
+      case Resource.Id.aboutMenuItem:     Navigate(new AboutFragment());     break;
+   }
+   ...
+}
+</pre></div></p>
+            </li>
+
+            <li>
+                Still in your <code>NavigationItemSelected</code> handler, set the state of the
+                <code>e.MenuItem</code> to checked - you do not need to uncheck the previous
+                selection since the <code>checkableBehavior</code> of the menu group is set to <code>single</code>.
+<p><pre class="prettyprint">
+e.MenuItem.SetChecked(true);
+</pre></p>
+            </li>
+
+            <li>
+                The last piece of your <code>NavigationItemSelected</code> handler is to close the drawer.
+                The steps are almost identical to when you opened the drawer.
+                First, use <code>FindViewById</code> to retrieve a reference to the <code>DrawerLayout</code>.
+                Second, call the <code>CloseDrawer</code> method and pass the gravity value to identify the drawer
+                (for us this will be <code>Android.Support.V4.View.GravityCompat.Start</code>).
+            </li>
+
+            <li>
+                Run the app to test your work.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you used Drawer Navigation to implement a flyout menu. This pattern can be complex to
+            code since it has several components that all need to interact with each other. However, it can be worth
+            the effort when you have an app with many pages: Drawer Navigation gives you the room for a
+            large menu with links to all your pages while taking up minimal UI real estate when the menu is closed.
+        </p>
+
+        <p>
+            In your opinion, was Drawer Navigation appropriate for this app? Would it have been better to use Tabs?
+            There is no right or wrong answer here, it is just something to think about.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

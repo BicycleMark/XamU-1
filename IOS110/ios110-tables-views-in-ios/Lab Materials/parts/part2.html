@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 2: Populating a Table View</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Fundamentals of TableViews</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+        
+        <h2>Duration</h2>
+        <p>15 minutes</p>
+
+        <h2>Goals</h2>
+       
+        <p>
+        The primary goal of this lab will be to populate the Table Views you created in the first exercise with data. We will work with <em>both</em> of the screens to show both of the mainstream techniques for supplying data to a Table View.
+        </p>
+
+        <h2>Required assets</h2>
+        <p>
+        There are some additional source and data files contained in the <b>Exercise 2</b> folder as well as a completed version of the exercise if you'd like to compare your solution when you are finished. If you did not complete the first exercise, you can use the <b>Completed</b> project located in the <b>Exercise 1</b> folder.
+        </p>
+
+        <h2>Challenge</h2>
+        <p>
+            You will be continuing from the prior exercise.
+            Here are the high-level steps for this exercise. Use these to work through the lab and refer to the step-by-step instructions that follow for any additional guidance you need.
+            <ol>
+                <li>
+                    Add the data which will drive the application. There is an <b>EmailServer.cs</b> source file and a <b>words.txt</b> data file which need to be added to your project. Place the data file into the <b>Resources</b> folder.
+                </li>
+                <li>
+                    The <b>EmailServer.cs</b> class is a simple data generator that "fakes" an email server. It has an <code>Email</code> property which provides an <code>IList&lt;EmailItem&gt;</code> that you will use to populate the Table View. Each <code>EmailItem</code> has a <code>Subject</code> property which we will use as the text.
+                </li>
+                <li>
+                    You will implement the data source in a <code>UITableViewSource</code> as well as in your <code>UITableViewController</code> class to try out both approaches.
+                </li>
+                <li>
+                    Implement the <code>RowsInSection</code> method to return the number of emails in the list. Code the <code>GetCell</code> method to create a <code>UITableViewCell</code>, populate the <code>TextLabel</code> and return the created cell.
+                </li>
+            </ol>
+        </p>
+
+        <!-- Steps -->
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <h2>Add the data to the application</h2>
+        <p>
+        There are two files in the <b>Exercise 2</b> folder - <b>EmailServer.cs</b> and <b>words.txt</b> which need to be added to the project.
+        </p>
+        <ol>
+            <li>
+            Let's start with <b>words.txt</b>, this is just a data file with a variety of words in it used to generate email text. It needs to be placed into the <b>Resources</b> folder of our application. Right click on the <b>Resources</b> folder and select <b>Add > Add Files</b>.
+            </li>
+            <img src="./res/images/lab2-addfile.PNG" />
+
+            <li>
+                Navigate to the <b>Exercise 2</b> folder and select <b>words.txt</b>. If you are using Visual Studio for Mac, select "Copy" when prompted; Visual Studio on Windows does the correct action by default.
+            </li>
+
+            <li>
+                Make sure the added file has a Build Action of "Bundle Resource". In Visual Studio on Windows, check the Build Action for the file in the properties page. In Visual Studio for Mac, right-click the file (or click the gear next to it) and select <b>Build Action</b> from the menu.
+            </li>
+            <img src="./res/images/lab2-bundleres.PNG" />
+
+            <li>
+                Add the <b>EmailServer.cs</b> file to the root of the project. The build action will be "Compile" (and should be set by default).
+            </li>
+        </ol>
+
+        <h2>Using the UITableViewController to populate a TableView</h2>
+        <p>
+        In this part, we will use the <code>EmailServer</code> and override methods in our <code>UITableViewController</code> to provide data for the Table View. We'll start here because it's the initial view controller, later we'll switch to our code-behind version.
+        </p>
+
+        <ol>
+            <li>
+                Open the <b>TableViewController.cs</b> source file - this is the file we created from the designer in the first exercise. This should be the initial view controller if you did all the instructions from that first exercise. If not, make sure to set it to be the starting screen.
+            </li>
+
+            <li>
+                Notice that the view controller derives from <code>UITableViewController</code> - this will allow us to implement the data-source methods directly in this one class.
+            </li>
+
+            <li>
+                Add a new <code>EmailServer</code> field to the class. Name it <code>emailServer</code>. Initialize it with a new server object.
+            </li>
+            
+            <li>
+                Next, let's implement the <code>RowsInSection</code> method - this is a virtual method of the <code>UITableViewController</code> class. It should return the number of emails available (<code>emailServer.Email.Count</code>).
+            </li>
+
+<p><a href="#" onclick="toggleCode(this,'rowsInSection1');return false;" class="uiitem">Show Code</a>
+<div class="indent-none" id="rowsInSection1" style="display:none;">
+<pre class="prettyprint">
+partial class TableViewController : UITableViewController
+{
+    ...
+
+    EmailServer emailServer = new EmailServer();
+
+    public override nint RowsInSection(UITableView tableview, nint section)
+    {
+       return emailServer.Email.Count;
+    }
+}
+</pre></div></p>
+
+            <li>
+            Next, implement the <code>GetCell</code> method - again, this is just a virtual override. You will need to perform the following steps:
+              <ul class="indent-none">
+                <li>
+                    Create a new <code>UITableViewCell</code> to represent the row visually. You can pass <code>CGRect.Empty</code> to the constructor as it will be sized automatically by the Table View.
+                </li>
+                <li>
+                    Find the proper <code>EmailItem</code> in the <code>Email</code> array - use the passed <code>NSIndex</code> to get the correct row.
+                </li>
+                <li>
+                    Populate the <code>TextLabel.Text</code> using the <code>Subject</code> from the email.
+                </li>
+                <li>
+                    Return the created cell.
+                </li>
+              </ul>
+            </li>
+
+<p><a href="#" onclick="toggleCode(this,'getCell1');return false;" class="uiitem">Show Code</a>
+<div class="indent-none" id="getCell1" style="display:none;">
+<pre class="prettyprint">
+public override UITableViewCell GetCell(UITableView tableView, 
+                                        NSIndexPath indexPath)
+{
+    UITableViewCell cell = new UITableViewCell(CGRect.Empty);
+    var item = emailServer.Email[indexPath.Row];
+
+    cell.TextLabel.Text = item.Subject;
+    return cell;
+}
+</pre></div></p>            
+
+            <li>
+                Run the application to see the results. If you don't see any data, make sure the proper screen is selected as the initial view controller.
+            </li>
+
+            <img src="./res/images/ex2_complete.jpg" width="320" />
+        </ol>
+
+
+        <h2>Using UITableViewSource to populate a TableView</h2>
+        <p>
+        In this second part, we will use the same email list along with a custom <code>UITableViewSource</code> to provide data for our Table View in code behind.
+        </p>
+        <ol>
+            <li>
+                Open the original View Controller where you created the Table View in code. In the completed lab, this is named <b>ViewController.cs</b> but it might have a different name in your project.
+            </li>
+
+            <li>
+                We need to create a new class that derives from <code>UITableViewSource</code>. You can place this class into its own file, or make it a nested class of the view controller where it is used - you will see this approach done quite often in sample code. Name the class "EmailServerDataSource".
+            </li>
+
+            <li>
+                Inside your new class, instantiate a new <code>EmailServer</code> and implement the <code>RowsInSection</code> and <code>GetCell</code> method just as you did earlier. In fact, you can just copy/paste the implementation into this class, just make sure to add any missing namespaces such as <code>Foundation</code> and <code>CoreGraphics</code>.
+            </li>
+
+<p><a href="#" onclick="toggleCode(this,'tableViewSource');return false;" class="uiitem">Show Code</a>
+<div class="indent-none" id="tableViewSource" style="display:none;">
+<pre class="prettyprint">
+class EmailServerDataSource : UITableViewSource
+{
+    EmailServer emailServer = new EmailServer();
+
+    public override nint RowsInSection(UITableView tableview, nint section)
+    {
+        return emailServer.Email.Count;
+    }
+
+    public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+    {
+        UITableViewCell cell = new UITableViewCell(CGRect.Empty);
+        var item = emailServer.Email[indexPath.Row];
+
+        cell.TextLabel.Text = item.Subject;
+        return cell;
+    }
+}
+</pre></div></p>
+
+            <li>
+                Add a field to the View Controller to hold your data source.
+            </li>
+
+            <li>
+                In the <code>ViewDidLoad</code> override, create the data source and assign it to the <code>TableView.Source</code> property, as well as your field.
+            </li>
+
+            <li>
+                Finally, before you run the app to test it, open the <b>Main.storyboard</b> and change the initial view controller back to the first screen (move the arrow from the currently selected screen to the other one).
+            </li>
+
+            <li>
+                Run the application and verify the results, you can change the <code>tableView.BackgroundColor</code> to <code>UIColor.Yellow</code> (or some other color) just to make sure you are looking at the right screen - this color will be used to fill the empty spaces.
+            </li>
+
+        </ol>
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you have populated two <code>UITableView</code> instances with data using the two most popular methods - <code>UITableViewController</code> and <code>UITableViewSource</code>.
+        </p>
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

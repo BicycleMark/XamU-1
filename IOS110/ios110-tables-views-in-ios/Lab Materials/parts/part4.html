@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 4: Using the accessory styles and row selection</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Fundamentals of TableViews</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+        
+        <h2>Duration</h2>
+        <p>20 minutes</p>
+
+        <h2>Goals</h2>
+       
+        <p>
+            The primary goal of this lab is to add interactivity to the rows of a Table View. You will navigate to a details view in response to a tap on the row.
+            You will add a cell accessory view and show an alert when the accessory view is tapped.
+        </p>
+
+        <h2>Required assets</h2>
+        <p>
+        There is a completed solution in the <b>Exercise 4</b> folder. In addition, if you did not complete the prior exercise, you can use the completed solution from that exercise as a starting point here.
+        </p>
+
+        <h2>Challenge</h2>
+        <p>
+            You will be continuing from the prior exercise and extending your code-based Table View implementation to manage interactivity. 
+            Here are the basic steps you will be performing:
+            <ol>
+                <li>
+                Create a new screen in the Storyboard - you will show this screen when the user taps on a row. 
+                </li>
+                <li>
+                Set an accessory style on the generated cell.
+                </li>
+                <li>
+                    Navigate to the details screen when the user taps on a row.
+                </li>
+                <li>
+                    Show an alert when the user taps on the accessory button.
+                </li>
+            </ol>
+        </p>
+
+        <!-- Steps -->
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise. We will be working only with the code-based Table View in this exercise. 
+        </p>
+
+        <h2>Add a Details screen</h2>
+        <p>
+            Let's start by adding a details screen in the Storyboard. We will display this screen when the user taps on a row. 
+            Creating a new screen is somewhat outside the scope of this course; however, it is common when working
+            with Table Views so it will be helpful to see how it is done.
+        </p>
+
+        <ol>
+            <li>
+                Open the <b>Main.storyboard</b> file.
+            </li>
+            <li>
+                Drag a <b>View Controller</b> from the Toolbox onto the design surface (it's easiest to drag it to an open area, you can zoom out if you need more space).
+            </li>
+            <li>
+                Give the new View Controller a <b>Class</b> of "DetailsViewController" - remember you need to select the View Controller in the black status bar or in the Document Outline, 
+                then you can set the <b>Class</b> in the Property tab. This will create the code-behind class for the View Controller.
+            </li>
+            <li>
+                While you are in the properties, give the View Controller a <b>Storyboard ID</b> as well (use the code-behind class name as the ID).
+                This will allow us to instantiate this View Controller from code by this identifier. The properties should look something like this:
+            </li>
+            
+            <img src="./res/images/lab4-name-viewcontroller.PNG" />
+
+            <li>
+                Drag a <b>Button</b> from the Toolbox onto your new View Controller. You can place it anywhere - the position does not matter. 
+                We will use this button to go back to the prior screen, so change the text to "Back".
+            </li>
+
+            <li>
+                With the button selected in the designer, switch to the "Events" tab in the property panel and add a new event named "OnDismiss" to the <b>Touch Up Inside</b> event.
+            </li>
+
+            <img src="./res/images/lab4-touch-up-event.PNG" />
+
+            <li>
+                Drag a <b>Label</b> from the Toolbox onto the new View Controller.
+                <ul class="indent-none">
+                    <li>
+                        Resize it to be a large block so it can fit multiple lines of text as shown below in the image. You might want to change to a phone view to fit this properly
+                        - this is done in the toolbar on the top with the "VIEW AS" drop-down. Change it to iPhone 5 just so you can see how large the space will be.
+                    </li>
+                    <li>
+                       Give the Label a name in the Properties of "EmailText", if you see a warning exclamation mark in the <b>Name</b> property after doing this, 
+                       it likely means you have not created a class for the View Controller back in step #3.
+                    </li>
+                    <li>
+                    Change the <b>Lines</b> property to "5" which will allow the text to wrap within the label up to 5 lines.
+                    </li>
+                </ul>
+            </li>
+
+            <img src="./res/images/lab4-label.png" />
+
+            <li>
+                Open the <b>DetailsViewController.cs</b> code behind file for the new screen and add the following highlighted code to it (just copy and paste it).
+            </li>
+
+<pre class="codeblock prettyprint">
+partial class DetailsViewController : UIViewController
+{
+    public DetailsViewController (IntPtr handle) : base (handle)
+    {
+    }
+<span class="highlight">
+    EmailItem item;
+    public EmailItem Item {
+        get {
+            return item;
+        }
+        set {
+            item = value;
+            UpdateItem();
+        }
+    }
+
+    public override void ViewWillAppear(bool animated)
+    {
+        base.ViewWillAppear(animated);
+        UpdateItem();
+    }
+
+    public void UpdateItem()
+    {
+        if (EmailText != null) {
+            EmailText.Text = (Item != null) ? Item.ToString() : "";
+        }
+    }
+
+    partial void OnDismiss(UIButton sender)
+    {
+        DismissViewController(true, null);
+    }  
+</span>
+}
+</pre>
+            <p>
+                The new code adds a property (<code>Item</code>) which will hold the selected <code>EmailItem</code>. 
+                When that property is set, it will fill in the label with the text of the email. To ensure that this always happens,
+                we call the update method both when the property is set and when the view is shown on the screen.
+            </p>
+            <p>
+                It also implements the <b>OnDismiss</b> event handler you added to the button and calls the <code>DismissViewController</code>
+                method which will close this screen. These methods and managing navigation are all discussed in the <b>Navigation in iOS</b> course.
+            </p>
+        </ol>
+
+        <h2>Adding an accessory view</h2>
+        <p>
+            Let's add a navigation accessory to the cell.
+        </p>
+        <ol>
+            <li>
+                Open the source file where you have your <code>UITableViewSource</code> implementation and find the <code>GetCell</code> method.
+            </li>        
+            <li>
+                Set the <code>Accessory</code> property on the cell to <b>DetailDisclosureButton</b>. 
+                This will add a navigation chevron and a details button to the row.
+            </li>
+        </ol>
+
+        <h2>Managing Row Selection in code</h2>
+        <p>
+            Next, let's use our code-based Table View to navigate to this new screen when we tap on the row.
+        </p>
+        <ol>
+            <li>
+                Open the source file where you have your <code>UITableViewSource</code> implementation. 
+                Recall that the <code>UITableViewSource</code> acts as <em>both</em> the data source and the delegate.
+            </li>        
+
+            <li>
+                Add an override for the <code>RowSelected</code> method. This is what will be called when you tap on a row. We need to do the following things:
+                <ul class="indent-none">
+                    <li>
+                        Instantiate the "DetailsViewController". We can't do this through <code>new</code> but instead have to use the <code>UIStoryboard.InstantiateViewController</code>
+                        method supplied by iOS to make sure the subviews are all initialized properly. Here's the code you need for this:
+<pre class="prettyprint codeblock">
+// Create the View Controller in the Main storyboard.
+var storyboard = UIStoryboard.FromName("Main", null);
+var detailViewController = 
+     (DetailsViewController) storyboard.InstantiateViewController(
+         "DetailsViewController");
+</pre>
+                        <div class="hintblock">
+                        <b>Note</b> that this code assumes your Storyboard has the filename "Main.storyboard" and that you set the <b>Storyboard ID</b> on your details view to be "DetailsViewController" as specified above. The solution template in Visual Studio might create a storyboard with a different filename.
+                        </div>
+                    </li>
+
+                    <li>
+                        Locate the proper <code>EmailItem</code> from the passed <code>NSIndexPath</code>.
+                    </li>
+
+                    <li>
+                        Assign the <code>EmailItem</code> to the <code>Item</code> property in the details view controller (remember we added the <code>Item</code> property above).
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+            Once we've got the details view ready, we can then "push" it onto the screen using the <code>UIViewController.ShowDetailViewController</code> method. This will require access to the View Controller that is displaying the Table View.
+                <ul class="indent-none">
+                    <li>
+                        Add a constructor to your <code>UITableViewSource</code> class which takes a view controller as a parameter and saves it in a field.
+                    </li>
+                    <li>
+                        Modify the <code>ViewDidLoad</code> method where the <code>UITableViewSource</code> class is created to pass the "this" reference.
+                    </li>
+                    <li>
+                        Back in your <code>RowSelected</code> method, call <code>ShowDetailViewController</code> on the cached field, passing the details view controller and the parent view controller (the field).
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                Check the code hint below to see the full set of changes to your <code>EmailServerDataSource</code> class.
+            </li>
+
+<p><a href="#" onclick="toggleCode(this,'rowSelected');return false;" class="uiitem">Show Code</a>
+<div class="indent-none" id="rowSelected" style="display:none;">
+<pre class="prettyprint">
+class EmailServerDataSource : UITableViewSource
+{
+    ...
+    ViewController owner;
+
+    public EmailServerDataSource(ViewController owner)
+    {
+        this.owner = owner;
+    }
+
+    public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+    {
+        // Create the View Controller in the Main storyboard.
+        var storyboard = UIStoryboard.FromName("Main", null);
+        var detailViewController = 
+             (DetailsViewController) storyboard.InstantiateViewController(
+                "DetailsViewController");
+
+        // Set the email details
+        var emailItem = emailServer.Email[indexPath.Row];
+        detailViewController.Item = emailItem;
+
+        // Show the new page as a "modal"
+        owner.ShowDetailViewController(detailViewController, owner);
+    }
+
+    ...
+}
+</pre></div></p>
+
+            <li>
+                Run the application and tap on a row to show the second screen with the detailed email information. Tap on the Back button to dismiss the details screen.
+            </li>
+        </ol>
+
+        <h2>Optional: Handle the Accessory click</h2>
+        <p>
+            In a previous step, we set the Accessory property of the cell to display a navigation chevron and a details button in the row.
+            Currently, tapping on the accessory button does nothing (you can run the app to test this if you would like to).
+            Here we will add support to handle the accessory button tap.
+        </p>
+        <ol>
+            <li>
+            In your <code>UITableViewSource</code> class, override the <code>AccessoryButtonTapped</code> method. Let's show an alert in response.
+                <ul class="indent-none">
+                    <li>
+                        Locate the proper <code>EmailItem</code> from the passed <code>NSIndexPath</code>.
+                    </li>
+                    <li>
+                        Create a new <code>UIAlertController</code> with the <b>Alert</b> style to display the email with a single "OK" button. Use the <code>ToString</code> method on the <code>EmailItem</code> to generate the body of the alert. Here's the code fragment you need:
+<pre class="codeblock prettyprint">
+var controller = UIAlertController.Create("Email Details", 
+         emailItem.ToString(), UIAlertControllerStyle.Alert);
+controller.AddAction(UIAlertAction.Create("OK", 
+        UIAlertActionStyle.Default, null));
+</pre>
+
+                    </li>
+                    <li>
+                        Display the alert using the <code>UIViewController.PresentViewController</code> method - this method is used to show content <em>over</em> an existing view controller. Recall you have a <code>UIViewController</code> in a field.
+                    </li>
+                </ul>
+            </li>
+<p><a href="#" onclick="toggleCode(this,'alert');return false;" class="uiitem">Show Code</a>
+<div class="indent-none" id="alert" style="display:none;">
+<pre class="prettyprint">
+public override void AccessoryButtonTapped(UITableView tableView, 
+                                           NSIndexPath indexPath)
+{
+    var emailItem = emailServer.Email[indexPath.Row];
+
+    var controller = UIAlertController.Create("Email Details", 
+                         emailItem.ToString(), UIAlertControllerStyle.Alert);
+    controller.AddAction(UIAlertAction.Create("OK", 
+                         UIAlertActionStyle.Default, null));
+
+    owner.PresentViewController(controller, true, null);
+}
+</pre></div></p>   
+            <li>
+                Run the application and tap on the "information" button at the right to see the alert displayed.
+            </li>
+	    <img src="./res/images/ex4_complete.jpg" width="320" />         
+        </ol>
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you have added a view accessory to the <code>UITableViewCell</code> and provided some basic navigation in response to a row selection.
+        </p>
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

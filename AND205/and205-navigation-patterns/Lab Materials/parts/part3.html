@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 3: Implement gestural navigation with ViewPager</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>AND205 - Android Navigation</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Duration</h2>
+        <p>
+            15 minutes
+        </p>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Goals</h2>
+ 
+        <p>
+            The goal of this lab is to add gestural navigation to a partially-written app.
+            You will be working on the same <strong>Clock</strong> app as in the previous exercise; however, this is not
+            a continuation of that lab. Instead, you will begin with the same starter code you used before - but this
+            time you will add gestural navigation instead of tab navigation.
+        </p>
+
+        <h2>Required assets</h2>
+        <p>
+            The provided <strong>Exercise 3/Start</strong> folder contains the project you will use as starter code.
+            There is also a <strong>Exercise 3/Completed</strong> folder with a solution you
+            can use to check your work. Please make sure you have these folders before you begin.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Create the tab UI
+        </h2>
+
+        <p>
+            In this part, you will create the <code>ViewPager</code> - there is very little work to do here
+            because the pages will be populated from code.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>Resources > layout > Main.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Add a <code>ViewPager</code> to the top of the existing <code>LinearLayout</code>.
+                The code is provided below to save you some typing.
+<p><pre class="prettyprint">
+&lt;android.support.v4.view.ViewPager
+   android:id="@+id/viewPager"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent" /&gt;
+</pre></p>
+            </li>
+
+            <li>
+                Remove the existing <code>FrameLayout</code>.
+                This is no longer needed because <code>ViewPager</code> has a built-in content area to display your fragments.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Code an adapter
+        </h2>
+
+        <p>
+            Here you create a <code>FragmentPagerAdapter</code> that will provide your fragments to the
+            <code>ViewPager</code> for display.
+        </p>
+
+        <ol>
+            <li>
+                Add a new C# class to the project. Name it <strong>ClockAdapter</strong>.
+            </li>
+
+            <li>
+                Set the base class for <code>ClockAdapter</code> to <code>Android.Support.V4.App.FragmentPagerAdapter</code>.
+            </li>
+
+            <li>
+                Add a field to store a collection of fragments as shown below.
+<p><pre class="prettyprint">
+Android.Support.V4.App.Fragment[] fragments;
+</pre></p>
+            </li>
+
+            <li>
+                Modify the constructor so it takes two arguments.
+                Pass the manager to your base class's constructor.
+                Assign the collection of fragments to your field.
+                The code is provided below.
+<p><pre class="prettyprint">
+public ClockAdapter(Android.Support.V4.App.FragmentManager fm, Android.Support.V4.App.Fragment[] fragments)
+   : base(fm)
+{
+   this.fragments = fragments;
+}
+</pre></p>
+            </li>
+
+            <li>
+                Override the <code>Count</code> property so it returns the number of fragments in the collection.
+            </li>
+
+            <li>
+                Override the <code>GetItem</code> method. It receives an integer which identifies the fragment
+                that is being requested by the <code>ViewPager</code>. Use that integer as an index into your
+                fragment collection to return the appropriate one.
+            </li>
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Connect the adapter and <code>ViewPager</code>
+        </h2>
+
+        <p>
+            You now have an implementation of a <code>FragmentPagerAdapter</code> and a <code>ViewPager</code>.
+            The code you write here will populate an adapter with your fragments and load it into the <code>ViewPager</code>.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>MainActivity.cs</strong>.
+                All the code you write here will be inside the <code>OnCreate</code> method.
+            </li>
+
+            <li>
+                Create an array of fragments and populate it with an object of each of the
+                three clock fragments. The code is provided below to save you time.
+<p><pre class="prettyprint">
+var fragments = new Android.Support.V4.App.Fragment[]
+{
+   new TimeFragment(),
+   new StopwatchFragment(),
+   new AboutFragment()
+};
+</pre></p>
+            </li>
+
+            <li>
+                Create a <code>ClockAdapter</code> object. You will need to pass in the value from the
+                <code>SupportFragmentManager</code> property you inherit from the <code>FragmentActivity</code>
+                base class and the array of fragments.
+            </li>
+
+            <li>
+                Use <code>FindViewById</code> to get a reference to the <code>ViewPager</code>.
+                Load your adapter object into the <code>ViewPager</code>'s <code>Adapter</code> property.
+            </li>
+
+            <li>
+                Run the app to test your work.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you used the Support Library's <code>ViewPager</code> class to implement gestural navigation.
+            The key piece of code your wrote was an adapter that supplied the <code>ViewPager</code> with the fragments
+            to display. <code>ViewPager</code> did most of the work for you: it has a built-in area to show your fragment,
+            it recognizes swipe gestures by the user, and it uses a fragment transaction to swap the visible fragment.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

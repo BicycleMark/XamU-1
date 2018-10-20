@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 4: Combine gestural and tab navigation</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>AND205 - Android Navigation</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Duration</h2>
+        <p>
+            15 minutes
+        </p>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Goals</h2>
+ 
+        <p>
+            The goal of this lab is to combine gestural and tab navigation to give the user both options for navigating the
+            fragments within an Activity. 
+            Your implementation will use both a <code>ViewPager</code> and a <code>TabLayout</code>.
+            The <code>ViewPager</code> will handle swipe gestures and the <code>TabLayout</code> will display the tabs.
+        </p>
+
+        <h2>Required assets</h2>
+        <p>
+            This is a continuation of the previous exercise. You can use your existing solution or open the solution in
+            the <strong>Exercise 3/Completed</strong> folder. The <strong>Exercise 4/Completed</strong>
+            folder contains a solution you can use to check your work. 
+            Please make sure you have these folders before you begin. 
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+       <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Add tab titles to your adapter
+        </h2>
+
+        <p>
+            Here you will modify your adapter to provide tab titles that will be displayed by the <code>TabLayout</code>.
+            The <code>ViewPager</code> requires that the tab titles be of type <code>ICharSequence</code> so that's the
+            type your adapter will use.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>ClockAdapter.cs</strong>.
+            </li>
+
+            <li>
+                Add a field to store the collection of titles as shown below.
+<p><pre class="prettyprint">
+ICharSequence[] titles;
+</pre></p>
+            </li>
+
+            <li>
+                Modify the constructor so it takes an addition argument for the collection of titles.
+                Assign the collection of titles to your field.
+                The code is provided below.
+<p><pre class="prettyprint">
+public ClockAdapter(Android.Support.V4.App.FragmentManager fm, Android.Support.V4.App.Fragment[] fragments, ICharSequence[] titles)
+   : base(fm)
+{
+   this.fragments = fragments;
+   this.titles    = titles;
+}
+</pre></p>
+            </li>
+
+            <li>
+                Override the <code>GetPageTitleFormatted</code> method. It receives an integer which identifies the title
+                that is being requested by the <code>TabLayout</code>. Use that integer as an index into your
+                titles collection to return the appropriate one.
+            </li>
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Create the tab UI
+        </h2>
+
+        <p>
+            In this part, you will add a <code>TabLayout</code> above the existing <code>ViewPager</code> in the UI XML.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>Resources > layout > Main.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Add a <code>TabLayout</code> to the top of the existing <code>LinearLayout</code>.
+                The code is provided below to save you some typing.
+<p><pre class="prettyprint">
+&lt;android.support.design.widget.TabLayout
+   android:id           ="@+id/tabLayout"
+   android:layout_width ="match_parent"
+   android:layout_height="wrap_content" /&gt;
+</pre></p>
+            </li>
+
+            <li>
+                Change the <code>layout_height</code> of the existing <code>ViewPager</code> to <code>wrap_content</code>.
+                It used to occupy the entire UI but now needs to share the space with the tabs.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>
+            Connect the adapter, the <code>TabLayout</code>, and the <code>ViewPager</code>
+        </h2>
+
+        <p>
+            You now have an implementation of a <code>FragmentPagerAdapter</code> that includes titles.
+            The code you write here will populate the adapter with titles and then connect the 
+            <code>TabLayout</code> and the <code>ViewPager</code> so they work together.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>MainActivity.cs</strong>.
+                All the code you write here will be inside the <code>OnCreate</code> method.
+            </li>
+
+            <li>
+                Create an array of <code>ICharSequence</code> and populate it with strings appropriate for your tab labels.
+                This requires the use of a conversion method so the code is provided below.
+<p><pre class="prettyprint">
+var titles = CharSequence.ArrayFromStringArray(new [] { "Time", "Stopwatch", "About" }); 
+</pre></p>
+            </li>
+
+            <li>
+                Add the array of tab titles to the constructor call where you create the <code>ClockAdapter</code>.
+            </li>
+
+            <li>
+                Use <code>FindViewById</code> to get a reference to the <code>TabLayout</code>.
+                Call <code>TabLayout</code>'s <code>SetupWithViewPager</code> method and pass it the <code>ViewPager</code> reference.
+            </li>
+            
+            <li>
+                The tab titles will be automatically populated from your adapter but the tab icons
+                will not. Add the following code to manually set the icon for each tab.
+<p><pre class="prettyprint">
+tabLayout.GetTabAt(0).SetIcon(Resource.Drawable.ic_access_time_white_24dp);
+tabLayout.GetTabAt(1).SetIcon(Resource.Drawable.ic_timer_white_24dp);
+tabLayout.GetTabAt(2).SetIcon(Resource.Drawable.ic_info_outline_white_24dp);
+</pre></p>
+            </li>
+
+            <li>
+                Run the app to test your work.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you used the Design Support Library's <code>TabLayout</code> class to implement tab navigation
+            and combined it with the Support Library's <code>ViewPager</code> class to add gestural navigation.
+            The two classes are designed to work together to support this exact scenario.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <div class="align-right">
+            <a href="../Start%20Here.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.</footer>
+</body>
+</html>

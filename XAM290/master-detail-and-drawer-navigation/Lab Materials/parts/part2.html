@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 2: Define the UI for drawer navigation</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>XAM290 Master-detail and Drawer Navigation in Xamarin.Forms</header>
+
+    <section id="main">
+        <h2>Exercise 2: Define the UI for drawer navigation</h2>
+        <p>The goal of this exercise is to use a <code>MasterDetailPage</code> to create the UI required for drawer navigation.</p>
+
+        <blockquote class="info-quote">To complete the exercise, you will need <a href="https://www.visualstudio.com/" target="_blank">Visual Studio for Windows or macOS</a> with the <a href="https://www.xamarin.com/visual-studio" target="_blank">Xamarin development tools</a> installed. You will also need either an emulator/simulator or a device to run the exercise on. Please see the <a href="https://university.xamarin.com/content/setupmenu" target="_blank">setup page</a> if you need help installing the Xamarin development environment.</blockquote>
+
+        <figure class="figure">
+            <img src="res/images/ex2-ios-popover.png" style="max-height: 450px;" />
+        </figure>
+
+        <hr>
+        <h2>Open the starter solution</h2>
+        <p>In Visual Studio, open the Exercise 2 Start solution included with the downloaded or cloned course materials:</p>
+        <ide name="xs">
+            <ol>
+                <li>Launch <strong>Visual Studio</strong></li>
+                <li>Open <strong>Exercise 2/Start/Astronomy.sln</strong></li>
+                <li>Explore the solution: In the shared <b>Astronomy</b> project there's data folder that contains our data source classes and there's a <b>Pages</b> folder that includes <code>Page</code>s to visualize this data.</code></li>
+                <li>Run the application, you should see an about screen but there's no way to navigate to other parts of the application.</li>
+            </ol>
+        </ide>
+
+        <hr>
+        <h2>Add a Master page</h2>
+        <p>We'll add a <strong>ContentPage</strong> that will contain the UI the user will use to navigate between the pages in our app.</p>
+        <ol>
+            <li>Open the shared <b>Astronomy</b> project.</li>
+            <li>Add a new xaml <code>ContentPage</code> named <b>AstronomyMasterPage</b>.</li>
+            <li>Open <b>AstronomyMasterPage.xaml</b>.</li>
+            <li>Add six (6) <code>Button</code>s, one for each content page. Name them: btnSunrise, btnMoonPhase, btnEarth, btnSun, btnMoon, and btnAbout and give them appropriate text. One possible layout is shown below.</li>
+            <li>Make sure you set a <code>Title</code> for your page or you will get an exception.</li>
+        </ol>
+
+<pre class="prettyprint-collapse"><code>
+&lt;StackLayout Margin="10">
+    &lt;Label Text="Main Menu" FontSize="Medium" HorizontalTextAlignment="Center" />
+
+    &lt;BoxView BackgroundColor="Gray" HeightRequest="1" />
+
+    &lt;Button x:Name="btnSunrise" Text="Sunrise and Sunset" />
+    &lt;Button x:Name="btnMoonPhase" Text="Moon Phase" />
+
+    &lt;BoxView BackgroundColor="Gray" HeightRequest="1" />
+
+    &lt;Button x:Name="btnEarth" Text="Earth Data" />
+    &lt;Button x:Name="btnSun" Text="Sun Data" />
+    &lt;Button x:Name="btnMoon" Text="Moon Data" />
+
+    &lt;BoxView BackgroundColor="Gray" HeightRequest="1" />
+
+    &lt;Button x:Name="btnAbout" Text="About Contoso Astronomy" />
+&lt;/StackLayout>
+</code></pre>
+
+        <hr>
+        <h2>Add a MasterDetail page</h2>
+        <ol>
+            <li>Open the shared <b>Astronomy</b> project.</li>
+            <li>Add a new class named <b>AstronomyMasterDetail</b>.</li>
+            <li>Open <b>AstronomyMasterDetail.cs</b>.</li>
+            <li>Update the class signature to derive from <code>MasterDetailPage</code>.</li>
+            <li>Ensure the class has a default constructor.</li>
+        </ol>
+
+<pre class="prettyprint-collapse"><code>
+namespace Astronomy
+{
+    public class AstronomyMasterDetailPage : MasterDetailPage
+    {
+        public AstronomyMasterDetailPage()
+        {
+        }
+    }
+}
+</code></pre>
+
+        <hr>
+        <h2>Assign the Master and Detail pages</h2>
+        <p>Before we can use our MasterDetail page we need to assign both the Master page and a default Detail page.</p>
+        <ol>
+            <li>In the constructor, create a new instance of <code>AstronomyMasterPage</code> and assign it to <code>AstronomyMasterDetailPage</code>'s <code>Master</code> property.</li>
+            <li>Instantiate any one of the pages in the <b>Pages</b> folder and assign it to the <code>Detail</code> property. Remember to surround it with a NavigationPage.</li>
+            <li>Set the master behavior to <code>MasterBehavior.Popover</code> so we always see the drawer.</li>
+            <li>Open <b>App.xaml.cs</b>.</li>
+            <li>Additionally, change the <code>MainPage</code> assignment to an instance of <code>AstronomyMasterDetailPage</code>.</li>
+        </ol>
+
+<pre class="prettyprint-collapse"><code>
+public AstronomyMasterDetailPage()
+{
+    this.Master = new AstronomyMasterPage();
+
+    this.Detail = new NavigationPage(new AboutPage());
+
+    this.MasterBehavior = MasterBehavior.Popover;
+}
+</code></pre>
+
+        <hr>
+        <h2>Add the menu icon for iOS</h2>
+        <p>iOS doesn't include a menu (or hamburger) icon so we'll need to add menu resources to the iOS head project.</p>
+        <ol>
+            <li>Open the <b>Astronomy.iOS</b> proeject and find the <b>Resources</b> folder.</li>
+            <li>In the downloaded materials, open the <b>Exercise 2/Assets/iOS/Resources</b> folder.</li>
+            <li>Add the provided <b>nav-menu-icon</b> pngs to the iOS head project (drag and drop).</li>
+            <li>Open <b>AstronomyMasterDetail.cs</b> in the shared project and find the constructor.</li>
+            <li>If you haven't already, store the master page instance in a local variable (name it <b>master</b>).</li>
+            <li>Load <b>nav-menu-icon.png</b> using the static <code>ImageSource.FromFile</code> method and assign it to <code>master.Icon</code>. You'll need a cast to <code>FileImageSource</code>.</li>
+            <li>Guard the assignment with an if statement: only assign the icon if the app is running on iOS by checking <code>Device.RuntimePlatform</code>.</li>
+            <li>Run the application. If possible, run on an iOS phone simulator and verify the menu icon is shown.</li>
+        </ol>
+
+        <p>Note: at this time we haven't connected the buttons to our master-detail navigation, so you won't be able to perform any navigation yet.</p>
+
+        <hr>
+        <h2>Exercise summary</h2>
+        <p>In this exercise, you created the initial UI required for a MasterDetailPage. You assembled a master page UI and the start of a detail page before assigning them to their respective parts on a MasterDetailPage that is now set to your app's MainPage. As well, we created the initial iOS menu icon for this master-detail presentation.</p>
+        <p>You can view the completed solution in the <strong>Exercise 2 &gt; Completed</strong> folder of your copy of the cloned or downloaded <a href="https://github.com/XamarinUniversity/XAM290/">course materials</a>.</p>
+
+
+        <div class="align-right">
+            <a href="../StartHere.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/jquery.imagemapster.min.js"></script>
+    <script src="./res/js/imagemap.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft.<br><a target="_blank" href="http://university.xamarin.com">Visit Xamarin University for more classes and content</a></footer>
+
+</body>
+</html>
