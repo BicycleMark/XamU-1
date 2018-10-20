@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using GreatQuotes.Data;
+using GreatQuotes.GreatQuotes;
 
 namespace GreatQuotes
 {
@@ -16,6 +17,7 @@ namespace GreatQuotes
         public override void FinishedLaunching(UIApplication application)
         {
             QuoteLoaderFactory.Create = () => new QuoteLoader();
+            ServiceLocator.Instance.Add<ITextToSpeech, TextToSpeechService>();
         }
 
         public override async void DidEnterBackground(UIApplication application)
