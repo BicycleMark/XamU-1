@@ -52,7 +52,6 @@
     <Compile Include="QuoteDetailActivity.cs" />
     <Compile Include="EditQuoteActivity.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Data\GreatQuote.cs" />
     <Compile Include="Data\QuoteLoader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,5 +97,11 @@
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GreatQuotes.Data\GreatQuotes.Data.csproj">
+      <Project>{D99C5C51-6554-4BC8-8DC3-6C46E7B43DA0}</Project>
+      <Name>GreatQuotes.Data</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

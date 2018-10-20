@@ -28,7 +28,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GreatQuote.cs" />
-    <Compile Include="QuoteLoader.cs" />
+    <Compile Include="IQuoteLoader.cs" />
+    <Compile Include="QuoteLoaderFactory.cs" />
+    <Compile Include="QuoteManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
