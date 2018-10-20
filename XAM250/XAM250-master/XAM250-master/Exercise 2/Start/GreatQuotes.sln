@@ -1,8 +1,6 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatQuotes", "GreatQuotes.csproj", "{75F15AD9-76D2-4179-840E-EDA33865B7ED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatQuotes.IOS", "GreatQuotes.iOS\GreatQuotes.IOS.csproj", "{0C0A5611-99A6-4A85-AF1E-40F765FF02BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatQuotes.Android", "GreatQuotes.Android\GreatQuotes.Android.csproj", "{DCBFD412-F64D-4806-84B0-FFC541AF5956}"
@@ -19,14 +17,6 @@ Global
 		Debug|iPhone = Debug|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Debug|x86.ActiveCfg = Debug|x86
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Debug|x86.Build.0 = Debug|x86
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Release|x86.ActiveCfg = Release|x86
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Release|x86.Build.0 = Release|x86
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{75F15AD9-76D2-4179-840E-EDA33865B7ED}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{0C0A5611-99A6-4A85-AF1E-40F765FF02BF}.Debug|x86.ActiveCfg = Debug|iPhoneSimulator
 		{0C0A5611-99A6-4A85-AF1E-40F765FF02BF}.Debug|x86.Build.0 = Debug|iPhoneSimulator
 		{0C0A5611-99A6-4A85-AF1E-40F765FF02BF}.Release|x86.ActiveCfg = Release|iPhone
