@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using System.Linq;
-
+using System.Xml;
 
 namespace GreatQuotes
 {
@@ -11,37 +11,40 @@ namespace GreatQuotes
     {
 		const string FileName = "quotes.xml";
 
-		public IEnumerable<GreatQuote> Load()
-		{
-			XDocument doc = null;
+        IEnumerable<GreatQuote> IQuoteLoader.Load()
+        {
+            XDocument doc = null;
 
-			string filename = Path.Combine(
-				System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
-				"..", "Library", FileName);
+            string filename = Path.Combine(
+                System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "..", "Library", FileName);
 
-			if (File.Exists(filename)) {
-				try 
-				{
-					doc = XDocument.Load(filename);
-				} 
-				catch 
-				{
-				}
-			} 
+            if (File.Exists(filename))
+            {
+                try
+                {
+                    doc = XDocument.Load(filename);
+                }
+                catch
+                {
+                }
+            }
 
-			if (doc == null)
-				doc = XDocument.Parse(DefaultData);
+            if (doc == null)
+                doc = XDocument.Parse(DefaultData);
 
-			if (doc.Root != null) {
-				foreach (var entry in doc.Root.Elements("quote")) {
-					yield return new GreatQuote(
-						entry.Attribute("author").Value, 
-						entry.Value);
-				}
-			}
-		}
+            if (doc.Root != null)
+            {
+                foreach (var entry in doc.Root.Elements("quote"))
+                {
+                    yield return new GreatQuote(
+                        entry.Attribute("author").Value,
+                        entry.Value);
+                }
+            }
+        }
 
-		public void Save(IEnumerable<GreatQuote> quotes)
+        public void Save(IEnumerable<GreatQuote> quotes)
 		{
 			string filename = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
