@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise-01", "Exercise-01", "{D43173CA-A572-4885-8688-C656DE1A8237}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise-02", "Exercise-02", "{DFB05159-CD97-4C02-9212-894B79212EEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|ARM = Ad-Hoc|ARM
@@ -223,5 +227,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F6912C46-B413-4322-A692-5B7EF3310E10} = {D43173CA-A572-4885-8688-C656DE1A8237}
+		{86BC25AB-70F0-499B-9CAC-1B415FD00061} = {D43173CA-A572-4885-8688-C656DE1A8237}
+		{D99C5C51-6554-4BC8-8DC3-6C46E7B43DA0} = {D43173CA-A572-4885-8688-C656DE1A8237}
+		{7EFA6197-44EC-45A7-B1D7-9FDD88969695} = {D43173CA-A572-4885-8688-C656DE1A8237}
+		{7D02E0ED-8243-4375-981B-7D8CF64A77D9} = {D43173CA-A572-4885-8688-C656DE1A8237}
 	EndGlobalSection
 EndGlobal
