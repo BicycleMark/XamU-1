@@ -3,6 +3,7 @@ using System;
 using Android.Runtime;
 using System.Collections.Generic;
 using System.Linq;
+using GreatQuotes.Data;
 
 namespace GreatQuotes
 {
@@ -19,13 +20,17 @@ namespace GreatQuotes
 		public override void OnCreate()
 		{
 			base.OnCreate();
-			quoteLoader = new QuoteLoader();
-			Quotes = quoteLoader.Load().ToList();
+           QuoteLoaderFactory.Create = () => new QuoteLoader();
+            //  QuoteManager.Instance.
+            // quoteLoader = new QuoteLoader();
+            ///Quotes = quoteLoader.Load().ToList();
+            Quotes = QuoteManager.Instance.Quotes.ToList<GreatQuote> ();
 		}
 
 		public static void Save()
 		{
-			quoteLoader.Save(Quotes);
+            //quoteLoader.Save(Quotes);
+            QuoteManager.Instance.Save();
 		}
 	}
 }

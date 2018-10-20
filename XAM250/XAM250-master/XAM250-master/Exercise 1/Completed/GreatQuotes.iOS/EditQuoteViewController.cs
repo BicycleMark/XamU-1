@@ -1,4 +1,5 @@
 using System;
+using GreatQuotes.Data;
 using UIKit;
 
 namespace GreatQuotes

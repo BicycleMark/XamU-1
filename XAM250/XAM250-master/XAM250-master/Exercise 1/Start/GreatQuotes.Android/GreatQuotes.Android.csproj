@@ -14,7 +14,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>GreatQuotes.Android</AssemblyName>
-    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -52,7 +52,6 @@
     <Compile Include="QuoteDetailActivity.cs" />
     <Compile Include="EditQuoteActivity.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Data\GreatQuote.cs" />
     <Compile Include="Data\QuoteLoader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,7 +87,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_action_new.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_new.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Resources\menu\" />
     <Folder Include="Resources\drawable\" />
@@ -98,5 +97,11 @@
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GreatQuotes.Data\GreatQuotes.Data.csproj">
+      <Project>{D99C5C51-6554-4BC8-8DC3-6C46E7B43DA0}</Project>
+      <Name>GreatQuotes.Data</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

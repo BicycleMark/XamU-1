@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GreatQuotes
+namespace GreatQuotes.Data
 {
     public static class QuoteLoaderFactory
     {
