@@ -4,10 +4,11 @@ using System.IO;
 using System.Xml.Linq;
 using System.Linq;
 
+
 namespace GreatQuotes
 {
-	public class QuoteLoader
-	{
+	public class QuoteLoader : IQuoteLoader
+    {
 		const string FileName = "quotes.xml";
 
 		public IEnumerable<GreatQuote> Load()
@@ -15,7 +16,7 @@ namespace GreatQuotes
 			XDocument doc = null;
 
 			string filename = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
+				System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
 				"..", "Library", FileName);
 
 			if (File.Exists(filename)) {

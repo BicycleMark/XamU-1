@@ -4,6 +4,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Content;
 
+
 namespace GreatQuotes
 {
 	[Activity]			

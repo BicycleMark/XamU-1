@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatQuotes.UWP", "GreatQuo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatQuotes.Data", "GreatQuotes.Data\GreatQuotes.Data.csproj", "{329D04D2-CCDE-4F3D-854F-43FB1F4E5B50}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise-01", "Exercise-01", "{37E232B4-CA1E-4142-83AE-D3A40A5818F4}"
+	ProjectSection(SolutionItems) = preProject
+		GreatQuotes.sln = GreatQuotes.sln
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise-02", "Exercise-02", "{CA5DC6C1-5C32-4FF8-856A-F274C4EA8373}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -255,5 +262,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{86BC25AB-70F0-499B-9CAC-1B415FD00061} = {37E232B4-CA1E-4142-83AE-D3A40A5818F4}
+		{329D04D2-CCDE-4F3D-854F-43FB1F4E5B50} = {37E232B4-CA1E-4142-83AE-D3A40A5818F4}
+		{7EFA6197-44EC-45A7-B1D7-9FDD88969695} = {37E232B4-CA1E-4142-83AE-D3A40A5818F4}
+		{7D02E0ED-8243-4375-981B-7D8CF64A77D9} = {37E232B4-CA1E-4142-83AE-D3A40A5818F4}
 	EndGlobalSection
 EndGlobal

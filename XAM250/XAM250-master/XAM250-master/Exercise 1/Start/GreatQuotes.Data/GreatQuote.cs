@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿// 1) Do UWP
+// 2) Do Untit Test
+// 3) Do see about really saving
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace GreatQuotes
